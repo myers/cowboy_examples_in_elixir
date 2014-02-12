@@ -1,5 +1,5 @@
 defmodule Clock.StreamHandler do
-	@doc Stream handler for clock synchronizing.
+  @doc "Stream handler for clock synchronizing."
   @period 1000 
 
   def init(_transport, req, _opts, _active) do
