@@ -1,8 +1,8 @@
-defmodule Clock.Mixfile do
+defmodule SockjsEcho.Mixfile do
   use Mix.Project
 
   def project do
-    [ app: :clock,
+    [ app: :sockjs_echo,
       version: "0.0.1",
       elixir: "~> 0.12.3",
       deps: deps ]
@@ -10,8 +10,10 @@ defmodule Clock.Mixfile do
 
   # Configuration for the OTP application
   def application do
-    [ applications: [:bullet],
-      mod: { Clock, [] } ]
+    [ 
+      applications: [:xmerl, :sockjs, :cowboy],
+      mod: { SockjsEcho, [] }
+    ]
   end
 
   # Returns the list of dependencies in the format:
@@ -21,7 +23,7 @@ defmodule Clock.Mixfile do
   # { :barbat, "~> 0.1", github: "elixir-lang/barbat" }
   defp deps do
     [ 
-      {:bullet, git: "https://github.com/extend/bullet.git"}
+      { :sockjs, github: "myers/sockjs-erlang", branch: "cowboy-0.9.0" }
     ]
   end
 end

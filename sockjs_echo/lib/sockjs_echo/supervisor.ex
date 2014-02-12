@@ -1,16 +1,13 @@
-defmodule Clock.Supervisor do
+defmodule SockjsEcho.Supervisor do
   use Supervisor.Behaviour
 
   def start_link do
     dispatch = [
       {:_, [
-        {"/", :cowboy_static, {:priv_file, :clock, "static/index.html"}},
-        {"/bullet_js/[...]", :cowboy_static, {:priv_dir, :bullet, ""}},
-
-        {"/bullet", :bullet_handler, [{:handler, Clock.StreamHandler}]},
-
+        {"/", :cowboy_static, {:priv_file, :sockjs_echo, "static/index.html"}},
+        {"/echo/[...]", :sockjs_cowboy_handler, :sockjs_handler.init_state("/echo", &SockjsEcho.Responder.echo/3, :state, [])},
         # catch all.  Must be last in the list
-        {"/[...]", :cowboy_static, {:priv_dir, :clock, "static"}},
+        {"/[...]", :cowboy_static, {:priv_dir, :sockjs_echo, "static"}},
       ]}
     ] |> :cowboy_router.compile
 
@@ -22,4 +19,5 @@ defmodule Clock.Supervisor do
   def init([]) do
     {:ok, {{:one_for_one, 10, 10}, []}}
   end
+
 end

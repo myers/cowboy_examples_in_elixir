@@ -1,7 +1,11 @@
-# Bullet Examples in Elixir
+# Cowboy Examples in Elixir
 
-These are some examples of how to use the bidirectional web communication
-library [bullet](https://github.com/extend/bullet) using
-[Elixir](http://elixir-lang.org/).
+These are some examples of how to use [cowboy](https://github.com/extend/cowboy) from [Elixir](https://github.com/extend/cowboy).
 
- * [Clock](./clock/) - a simple example ported from erlang
+
+## Bidirection IO
+
+These examples show off bidirectional IO in a browser.  SockJS is more well known, but bullet seems like a much simpler implementation.
+
+* [Bullet Clock](./bullet_clock/) - use [bullet](https://github.com/extend/bullet) to show a clock. 
+* [SockJS Echo](./sockjs_echo/) - use [sockjs-erlang](https://github.com/sockjs/sockjs-erlang) to echo back what's entered.  
