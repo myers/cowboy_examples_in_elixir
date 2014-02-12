@@ -5,7 +5,6 @@ defmodule Clock.Supervisor do
     dispatch = [
       {:_, [
         {"/", :cowboy_static, {:priv_file, :clock, "static/index.html"}},
-        #{"/_ws", Sheep.Web.ChatHandler, []},
         {"/bullet_js/[...]", :cowboy_static, {:priv_dir, :bullet, ""}},
 
         {"/bullet", :bullet_handler, [{:handler, Clock.StreamHandler}]},
