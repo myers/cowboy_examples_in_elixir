@@ -4,7 +4,7 @@ A port of the [clock example
 app](https://github.com/extend/bullet/tree/master/examples/clock].  It shows
 off how to connect via Websockets, EventSource and long polling http.
 
-To fetch the needed dependancies and run the server
+To fetch the needed dependencies and run the server
 
     mix deps.get
     mix run --no-halt
