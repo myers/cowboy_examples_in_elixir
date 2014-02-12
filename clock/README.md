@@ -1,8 +1,9 @@
 # Clock
 
 A port of the [clock example
-app](https://github.com/extend/bullet/tree/master/examples/clock].  It shows
-off how to connect via Websockets, EventSource and long polling http.
+app](https://github.com/extend/bullet/tree/master/examples/clock).  It shows
+off how bullet can connect via Websockets, EventSource and long polling http
+all at the same time.
 
 To fetch the needed dependencies and run the server
 
