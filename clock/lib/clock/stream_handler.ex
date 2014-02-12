@@ -29,7 +29,7 @@ defmodule Clock.StreamHandler do
   end
 
   def terminate(_req, tref) do
-    IO.puts "bullet init"
+    IO.puts "bullet terminate"
     :erlang.cancel_timer tref
     {:ok}
   end  
