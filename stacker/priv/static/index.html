@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="/sockjs-0.3.4.js"></script>
+    <title>Web Stacker</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Web Stacker</h1>
+      <p>This brings the sample app you built reading about building OTP apps using Mix to the web.  Below you can either push a string on to the stack, or pop one off.  The fun really starts when you open another browser and push stuff on there and pop it off here.</p>
+      <div class="row">
+        <div class="col-md-6">
+          <form role="form" class="form-inline" id="push_form">
+            <div class="form-group">
+              <label class="sr-only" for="push_data">What should we push</label>
+              <input type="text" autocomplete="off" class="form-control" id="push_data" placeholder="type something here">
+            </div>
+            <button type="submit" class="btn btn-primary">Push</button>
+          </form>
+        </div>
+        <div class="col-md-6">
+          <form role="form" class="form-inline" id="pop_form">
+            <button type="submit" class="btn btn-primary">Pop</button>
+          </form>
+        </div>
+      </div>
+      <br><br>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Output</h3>
+            </div>
+            <div class="panel-body" id="output" style="height: 300px; overflow:auto;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        function log(m) {
+          $('#output').append($("<code>").text(m));
+          $('#output').append($("<br>"));
+          $('#output').scrollTop($('#output').scrollTop()+10000);
+        }
+
+        var sockjs = new SockJS('/stacker');
+        sockjs.onopen = function() {
+            log(' [*] Connected (using: '+sockjs.protocol+')');
+        };
+        sockjs.onclose = function(e) {
+            log(' [*] Disconnected ('+e.status + ' ' + e.reason+ ')');
+        };
+        sockjs.onmessage = function(e) {
+            log(' [ ] received: ' + JSON.stringify(e.data));
+        };
+
+        function send(msg) {
+          var json_msg = JSON.stringify(msg);
+          if (sockjs.readyState !== SockJS.OPEN) {
+            log(' (error, connection not established)');
+          } else {
+            sockjs.send(json_msg);
+            log(' [ ] sent: ' + json_msg);
+          }
+        }
+
+        $('#pop_form').submit(function(event) {
+          event.preventDefault();
+          send(['pop']);
+        });
+        $('#push_form').submit(function(event) {
+          event.preventDefault();
+          send(['push', $('#push_data').val()]);
+          $('#push_data').val('');
+        });
+      </script>
+    </div>
+  </body>
+</html>
