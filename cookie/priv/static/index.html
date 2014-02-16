@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Elixir Cookie Middleware</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+</head>
+
+<body>
+  <h1>What cookies do I have?</h1>
+  <table id="cookies">
+    <thead>
+      <tr> 
+        <td>name</td><td>value</td>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <script>
+    document.cookie.split(/; */).forEach(function(cookieraw){
+      var cookie = cookieraw.split('=');
+      var name = cookie[0];
+      var value = cookie[1];
+
+      $("table#cookies tbody").append("<tr><td>" + name + "</td><td>" + value + "</tr>");
+    });
+  </script>
+</body>
+</html>
