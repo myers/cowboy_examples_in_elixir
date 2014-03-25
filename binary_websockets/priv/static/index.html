@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Websocket client</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/cbor.js"></script>
+    <script>
+      'use strict';
+
+      function relativeWebsocketUrl(ws_path, base_location) {
+        if (typeof(base_location) === 'undefined') {
+          base_location = window.location;
+        }
+        var protocol;
+        if (base_location.protocol === 'https:') {
+          protocol = 'wss:';
+        } else if (base_location.protocol === 'http:') {
+          protocol = 'ws:'
+        } else {
+          console.log(base_location.protocol);
+          debugger
+        }
+        return protocol + '//' + window.location.host + ws_path;
+      }
+      var websocket;
+      
+      function init() {
+        if(!('WebSocket' in window)) {
+          $('#status').append('<p><span style="color: red;">websockets are not supported </span></p>');
+          $('#navigation').hide();
+        } else {
+          $('#status').append('<p><span style="color: green;">websockets are supported </span></p>');
+          connect();
+        }
+        $('#connected').hide();
+        $('#content').hide();
+      }
+
+      function connect()
+      {
+        var wsHost = relativeWebsocketUrl('/websocket');
+        websocket = new WebSocket(wsHost);
+        websocket.binaryType = 'arraybuffer';
+        showScreen('<b>Connecting to: ' +  wsHost + '</b>');
+        websocket.onopen = function(evt) { onOpen(evt); };
+        websocket.onclose = function(evt) { onClose(evt); };
+        websocket.onmessage = function(evt) { onMessage(evt); };
+        websocket.onerror = function(evt) { onError(evt); };
+      }
+      
+      function disconnect() {
+        websocket.close();
+      }
+
+      function toggleConnection(){
+        if(websocket.readyState === websocket.OPEN){
+          disconnect();
+        } else {
+          connect();
+        }
+      }
+
+      function sendTxt() {
+        if(websocket.readyState === websocket.OPEN){
+          var value;
+          try {
+            value = JSON.parse($('#send_txt').val());
+          } catch (e) {
+            showScreen(e);
+          }
+          websocket.send(cbor.encode(value));
+          showScreen('sending: ' + JSON.stringify(value));
+        } else {
+          showScreen('websocket is not connected');
+        }
+      }
+
+      function onOpen(evt) {
+        showScreen('<span style="color: green;">CONNECTED </span>');
+        $('#connected').fadeIn('slow');
+        $('#content').fadeIn('slow');
+      }
+
+      function onClose(evt) {
+        showScreen('<span style="color: red;">DISCONNECTED </span>');
+      }
+
+      function onMessage(evt) {
+        showScreen('<span style="color: blue;">RESPONSE: ' + JSON.stringify(cbor.decode(evt.data)) + '</span>');
+      }
+
+      function onError(evt) {
+        showScreen('<span style="color: red;">ERROR: ' + evt.data + '</span>');
+      }
+
+      function showScreen(txt) {
+        $('#output').prepend('<p>' + txt + '</p>');
+      }
+
+      function clearScreen() 
+      {
+        $('#output').html('');
+      }
+
+      $(document).ready(init);
+  </script>
+  </head>
+
+  <body>
+    <div id="header">
+      <h1>Websocket client</h1>
+      <div id="status"></div>
+    </div>
+
+
+    <div id="navigation">
+      <div id="connected">        
+        <label for="send_txt">Type in valid JSON</label><br />
+        <textarea id="send_txt"></textarea>
+        <button type="button" onclick="sendTxt()">send</button>
+      </div>
+
+      <div id="content">            
+        <button id="clear" onclick="clearScreen()" >Clear messages</button>
+        <div id="output"></div>
+      </div>
+
+    </div>
+  </body>
+</html> 
