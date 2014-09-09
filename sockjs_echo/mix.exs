@@ -4,7 +4,7 @@ defmodule SockjsEcho.Mixfile do
   def project do
     [ app: :sockjs_echo,
       version: "0.0.1",
-      elixir: "~> 0.12.3",
+      elixir: "~> 0.15.0",
       deps: deps ]
   end
 
