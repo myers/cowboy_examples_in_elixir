@@ -1,5 +1,5 @@
 defmodule SockjsEcho.Supervisor do
-  use Supervisor.Behaviour
+  use Behaviour
 
   def start_link do
     dispatch = [

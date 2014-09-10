@@ -1,5 +1,5 @@
 defmodule SockjsEcho do
-  use Application.Behaviour
+  use Behaviour
 
   # See http://elixir-lang.org/docs/stable/Application.Behaviour.html
   # for more information on OTP Applications
